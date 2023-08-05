@@ -1,2 +1,2 @@
 export * from './AppSettings';
-export * from './PaymentConstants';
+export * from './ReduxConstants';
