@@ -18,26 +18,41 @@ export const appSlice = createSlice({
       state.categories.push(action.payload);
     },
     removeCategory: (state, action) => {
-      return produce(state, draft => {
-        draft.categories = draft.categories.filter(
-          category => category.id !== action.payload,
-        );
-      });
+      state.categories = state.categories.filter(
+        category => category.id !== action.payload.categoryId,
+      );
     },
-    updateCategory: (state, action) => {
-      return produce(state, draft => {
-        const categoryIndex = draft.categories.findIndex(
-          category => category.id === action.payload.id,
-        );
-        draft.categories[categoryIndex] = action.payload;
-      });
+    changeCategoryTitle: (state, action) => {
+      const categoryIndex = state.categories.findIndex(
+        category => category.id === action.payload.categoryId,
+      );
+      state.categories[categoryIndex].title = action.payload.value;
     },
+    selectTitleField: (state, action) => {
+      const categoryIndex = state.categories.findIndex(
+        category => category.id === action.payload.categoryId,
+      );
+
+      state.categories[categoryIndex].item_title_key = action.payload.fieldKey;
+    },
+
     addNewField: (state, action) => {
       const categoryIndex = state.categories.findIndex(
         category => category.id === action.payload.categoryId,
       );
 
       state.categories[categoryIndex].fields.push(action.payload.field);
+    },
+    changeFieldTitle: (state, action) => {
+      const categoryIndex = state.categories.findIndex(
+        category => category.id === action.payload.categoryId,
+      );
+      const fieldIndex = state.categories[categoryIndex].fields.findIndex(
+        field => field.key === action.payload.fieldKey,
+      );
+
+      state.categories[categoryIndex].fields[fieldIndex].title =
+        action.payload.value;
     },
     removeField: (state, action) => {
       const categoryIndex = state.categories.findIndex(
@@ -54,8 +69,10 @@ export const categoriesSelector = state => state.appReducer.categories;
 export const {
   addCategory,
   removeCategory,
-  updateCategory,
+  changeCategoryTitle,
   addNewField,
   removeField,
+  changeFieldTitle,
+  selectTitleField,
 } = appSlice.actions;
 export default appSlice.reducer;

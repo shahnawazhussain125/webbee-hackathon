@@ -1,18 +1,8 @@
 import React, { useState } from 'react';
-import { Menu, Divider, Provider, Button } from 'react-native-paper';
-import { View, } from 'react-native';
 import DropDown from 'react-native-paper-dropdown';
 
-const DropdownButton = ({ onSelectItem }) => {
+const DropdownButton = ({ title, onSelectItem, dropdownOptions }) => {
     const [visible, setVisible] = useState(false);
-    const [gender, setGender] = useState();
-
-    const dropdownOptions = [
-        { label: 'Text', value: 'text' },
-        { label: 'Checkbox', value: 'checkbox' },
-        { label: 'Number', value: 'number' },
-        { label: 'Date', value: 'date' },
-    ];
 
     const handleOnSelect = (value) => {
         onSelectItem(value);
@@ -20,12 +10,12 @@ const DropdownButton = ({ onSelectItem }) => {
 
     return (
         <DropDown
-            label="Add Field"
+            label={title}
             mode="outlined"
             visible={visible}
             showDropDown={() => setVisible(true)}
             onDismiss={() => setVisible(false)}
-            value={"Add Field"}
+            value={title}
             setValue={handleOnSelect}
             list={dropdownOptions}
         />

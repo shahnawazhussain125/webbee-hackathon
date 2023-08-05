@@ -5,7 +5,6 @@ export interface FieldType {
 }
 
 export interface ItemType {
-  title_key: string;
   type: string;
   key: string;
   value: string;
@@ -14,6 +13,7 @@ export interface ItemType {
 export interface CategoryType {
   id: string;
   title: string;
+  item_title_key: string;
   fields: FieldType[];
   items: ItemType[];
 }

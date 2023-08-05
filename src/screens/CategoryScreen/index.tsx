@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert, FlatList, View } from 'react-native';
 import CategoryCard from "../../components/CategoryCard"
-import { addCategory, addNewField, categoriesSelector, removeField } from '../../redux/slices/appSlice';
+import { addCategory, addNewField, categoriesSelector, changeCategoryTitle, changeFieldTitle, removeCategory, removeField, selectTitleField } from '../../redux/slices/appSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'react-native-paper';
 import { CategoryType } from '@types';
@@ -15,8 +15,14 @@ const CategoryScreen: React.FC = () => {
     const dispatch = useDispatch();
     const categories = useSelector(categoriesSelector);
     const renderCategoryItem = ({ item }) => {
-        return <CategoryCard item={item} addNewField={handleOnNewField}
+        return <CategoryCard
+            item={item}
+            addNewField={handleOnNewField}
             removeField={handleOnRemoveField}
+            removeCategory={handleOnRemoveCategory}
+            onChangeFieldValue={handleOnChangeFieldValue}
+            onChangeCategoryTitle={handleOnChangeCategoryTitle}
+            onSelectTitleField={handleOnSelectTitleField}
         />;
     }
 
@@ -75,6 +81,70 @@ const CategoryScreen: React.FC = () => {
             Alert.alert("Error", error?.message);
         }
     }
+
+    const handleOnRemoveCategory = async (category_id) => {
+        try {
+            const payload = {
+                categoryId: category_id,
+            };
+
+            await dispatch(removeCategory(payload))
+        } catch (error) {
+            console.log(error);
+
+            Alert.alert("Error", error?.message);
+        }
+    }
+
+    const handleOnChangeFieldValue = async (category_id, field_key, value) => {
+        try {
+            const payload = {
+                categoryId: category_id,
+                fieldKey: field_key,
+                value: value,
+            };
+
+            await dispatch(changeFieldTitle(payload))
+        } catch (error) {
+            console.log(error);
+
+            Alert.alert("Error", error?.message);
+        }
+    }
+
+    const handleOnChangeCategoryTitle = async (category_id, value) => {
+        try {
+            const payload = {
+                categoryId: category_id,
+                value: value,
+            };
+
+            console.log("payload", payload);
+
+
+            await dispatch(changeCategoryTitle(payload))
+        } catch (error) {
+            console.log(error);
+
+            Alert.alert("Error", error?.message);
+        }
+    }
+
+    const handleOnSelectTitleField = async (category_id, field_key) => {
+        try {
+            const payload = {
+                categoryId: category_id,
+                fieldKey: field_key,
+            };
+
+            await dispatch(selectTitleField(payload))
+        } catch (error) {
+            console.log(error);
+
+            Alert.alert("Error", error?.message);
+        }
+    }
+
 
     return (
         <View style={styles.container}>
