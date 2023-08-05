@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
 const middleware =
   process.env.NODE_ENV !== 'production'
     ? [require('redux-immutable-state-invariant').default(), thunk]
-    : [thunk];
+    : [require('redux-immutable-state-invariant').default(), thunk];
 
 const persistedConfig = {
   key: REDUX_STORAGE_KEY,

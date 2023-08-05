@@ -4,10 +4,14 @@ export interface FieldType {
   key: string;
 }
 
-export interface ItemType {
-  type: string;
+export interface ItemValueType {
   key: string;
   value: string;
+}
+
+export interface ItemType {
+  id: string;
+  values: ItemValueType[];
 }
 
 export interface CategoryType {

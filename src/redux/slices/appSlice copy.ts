@@ -99,17 +99,17 @@ export const appSlice = createSlice({
       console.log('itemIndex', itemIndex);
       console.log('categoryIndex', categoryIndex);
 
-      if (valueIndex === -1) {
-        state.categories[categoryIndex].items[itemIndex].values.push({
-          key: fieldKey,
-          value: value,
-        });
-        return;
-      }
+      // if (valueIndex === -1) {
+      //   state.categories[categoryIndex].items[itemIndex].values.push({
+      //     key: fieldKey,
+      //     value: value,
+      //   });
+      //   return;
+      // }
 
-      state.categories[categoryIndex].items[itemIndex].values[
-        valueIndex
-      ].value = value;
+      // state.categories[categoryIndex].items[itemIndex].values[
+      //   valueIndex
+      // ].value = value;
     },
   },
 });
@@ -126,6 +126,5 @@ export const {
   ///
   addNewItem,
   removeItem,
-  changeItemFieldValue,
 } = appSlice.actions;
 export default appSlice.reducer;

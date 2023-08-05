@@ -14,7 +14,7 @@ const Drawer = createDrawerNavigator<DrawerRoutes>();
 const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
-      initialRouteName='Categories'
+      initialRouteName='Machines'
       screenOptions={props => ({
         drawerStyle: styles.drawerStyle,
       })}
