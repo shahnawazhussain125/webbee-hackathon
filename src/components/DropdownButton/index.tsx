@@ -1,35 +1,34 @@
 import React, { useState } from 'react';
 import { Menu, Divider, Provider, Button } from 'react-native-paper';
 import { View, } from 'react-native';
+import DropDown from 'react-native-paper-dropdown';
 
-const DropdownButton = () => {
-    const [visible, setVisible] = useState(true);
-    const openMenu = () => setVisible(true);
-    const closeMenu = () => setVisible(false);
+const DropdownButton = ({ onSelectItem }) => {
+    const [visible, setVisible] = useState(false);
+    const [gender, setGender] = useState();
 
     const dropdownOptions = [
-        { label: 'Option 1', value: 'option1' },
-        { label: 'Option 2', value: 'option2' },
-        { label: 'Option 3', value: 'option3' },
-
+        { label: 'Text', value: 'text' },
+        { label: 'Checkbox', value: 'checkbox' },
+        { label: 'Number', value: 'number' },
+        { label: 'Date', value: 'date' },
     ];
 
+    const handleOnSelect = (value) => {
+        onSelectItem(value);
+    }
+
     return (
-        <View style={{ padding: 16 }}>
-            <Provider>
-                <Menu
-                    visible={visible}
-                    onDismiss={closeMenu}
-                    anchor={<Button mode="contained" onPress={openMenu}>Open Dropdown</Button>}
-                >
-                    {dropdownOptions.map((option) => (
-                        <Menu.Item key={option.value} onPress={() => closeMenu()} title={option.label} />
-                    ))}
-                    <Divider />
-                    <Menu.Item onPress={() => closeMenu()} title="Cancel" />
-                </Menu>
-            </Provider>
-        </View>
+        <DropDown
+            label="Add Field"
+            mode="outlined"
+            visible={visible}
+            showDropDown={() => setVisible(true)}
+            onDismiss={() => setVisible(false)}
+            value={"Add Field"}
+            setValue={handleOnSelect}
+            list={dropdownOptions}
+        />
     );
 };
 

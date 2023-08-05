@@ -1,18 +1,18 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import {persistReducer, persistStore} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import workoutSlice from './slices/workoutSlice';
+import appSlice from './slices/appSlice';
 import {REDUX_STORAGE_KEY} from '@constants';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 
 const rootReducer = combineReducers({
-  workoutReducer: workoutSlice,
+  appReducer: appSlice,
 });
 
 const middleware =
   process.env.NODE_ENV !== 'production'
-    ? [require('redux-immutable-state-invariant').default(), thunk, logger]
+    ? [require('redux-immutable-state-invariant').default(), thunk]
     : [thunk];
 
 const persistedConfig = {

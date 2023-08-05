@@ -8,37 +8,52 @@ import styles from './styles';
 import { vw } from '@utils';
 
 
-const CategoryCard = () => {
+const CategoryCard = ({ item, addNewField, removeField }) => {
     const windowWidth = useWindowDimensions().width;
     const cardWidth = windowWidth / 2 - 40;
+
+    const handleOnAddField = (field_type) => {
+        addNewField(item.id, field_type);
+    }
+    const handleOnRemoveField = (field_key) => {
+        removeField(item.id, field_key);
+    }
 
     return (
         <Card style={[styles.container, { width: cardWidth }]}>
             <Card.Content style={styles.contentContainer}>
-                <Text style={styles.titleText}>Title</Text>
+                <Text style={styles.titleText}>{item.title}</Text>
                 <TextInput
                     mode="outlined"
                     label="Category Name"
                     placeholder="Category Name"
                 />
-                <View style={styles.rowContainer}>
-                    <TextInput
-                        mode="outlined"
-                        label="Field"
-                        placeholder="Field Name"
-                    />
-                    <Text variant="bodyLarge" style={styles.fieldTypeText}>TEXT</Text>
-                    <IconButton
-                        icon="camera"
-                        iconColor={colours.black}
-                        size={20}
-                        onPress={() => console.log('Pressed')}
-                    />
-                </View>
+                {
+                    item.fields.map((field, index) => {
+                        return (
+                            <View style={styles.rowContainer} key={index}>
+                                <TextInput
+                                    mode="outlined"
+                                    label={field.title}
+                                    placeholder={field.title}
+                                    defaultValue={field.title}
+                                />
+                                <Text variant="bodyLarge" style={styles.fieldTypeText}>{field.type}</Text>
+                                <IconButton
+                                    icon="camera"
+                                    iconColor={colours.black}
+                                    size={20}
+                                    onPress={() => handleOnRemoveField(field.key)}
+                                />
+                            </View>
+                        )
+                    })
+                }
+
                 <Button mode="contained" onPress={() => console.log('Pressed')} >
                     Title Filed:
                 </Button>
-                <DropdownButton />
+                <DropdownButton onSelectItem={handleOnAddField} />
                 <View>
                     <Button mode="outlined" onPress={() => console.log('Pressed')} >
                         Add Field

@@ -1,5 +1,5 @@
 import {combineReducers} from '@reduxjs/toolkit';
-import workoutSlice from './workoutSlice';
+import workoutSlice from './appSlice';
 
 const rootReducer = combineReducers({
   workoutReducer: workoutSlice,
