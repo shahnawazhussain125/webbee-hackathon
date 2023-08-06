@@ -7,6 +7,7 @@ import styles from './styles';
 
 const DashboardScreen = () => {
     const categories = useAppSelector(categoriesSelector);
+
     return (
         <View style={styles.container}>
             <ScrollView>

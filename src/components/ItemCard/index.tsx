@@ -5,22 +5,17 @@ import SwitchButton from '../SwitchButton';
 import DatePicker from '../DatePicker';
 import { TextInput } from '@components';
 import styles from './styles';
+import { FieldType, ItemType, ItemValueType } from '@types';
 
 interface ItemCardProps {
-    item: {
-        id: string;
-        values: { key: string, title: string, value: string | boolean | number, type: string }[];
-    };
+    item: ItemType;
     title_key: string;
-    fields: { key: string, title: string, value: string | boolean | number, type: string }[];
+    fields: FieldType[];
     onRemoveItem: (item_id: string) => void;
     onChangeFieldValue: (item_id: string, field_key: string, field_value: string) => void;
-    onChangeCategoryTitle: (item_id: string, value: string) => void;
-    onSelectTitleField: (item_id: string, field_key: string) => void;
-
 }
 
-const ItemCard = ({ item, title_key, fields, onRemoveItem, onChangeFieldValue, onChangeCategoryTitle, onSelectTitleField }: ItemCardProps) => {
+const ItemCard = ({ item, title_key, fields, onRemoveItem, onChangeFieldValue, }: ItemCardProps) => {
     const windowWidth = useWindowDimensions().width;
     const cardWidth = windowWidth / 2 - 40;
 

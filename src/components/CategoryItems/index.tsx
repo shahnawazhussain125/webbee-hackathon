@@ -17,9 +17,9 @@ const CategoryItems = (props: ItemScreenProps) => {
     const dispatch = useAppDispatch();
     const allItems = useAppSelector(itemsSelector);
 
-
-
-    const renderCategoryItem = ({ item }: ItemType) => {
+    const renderCategoryItem = ({ item }: {
+        item: ItemType;
+    }) => {
         if (!category) return null;
         return <ItemCard
             item={item}
