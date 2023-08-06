@@ -1,11 +1,21 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import styles from './styles'
+import React from 'react';
+import { ScrollView, View } from 'react-native';
+import { categoriesSelector } from '../../redux/slices/categorySlice';
+import CategoryItems from '../../components/CategoryItems';
+import { useAppSelector } from '@hooks';
+import styles from './styles';
 
 const DashboardScreen = () => {
+    const categories = useAppSelector(categoriesSelector);
     return (
         <View style={styles.container}>
-            <Text>DashboardScreen</Text>
+            <ScrollView>
+                {
+                    categories.map((category) => (
+                        <CategoryItems category={category} />
+                    ))
+                }
+            </ScrollView>
         </View>
     )
 }
