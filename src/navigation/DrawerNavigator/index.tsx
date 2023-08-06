@@ -1,37 +1,35 @@
 import React from 'react';
-// import DrawerContent from '../../components/DrawerComponents/DrawerContent';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { categoriesSelector } from '../../redux/slices/appSlice';
 import DashboardScreen from '../../screens/DashboardScreen';
 import CategoryScreen from '../../screens/CategoryScreen';
 import MachineScreen from '../../screens/MachineScreen';
-import { StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 import { DrawerRoutes } from '@types';
-import { colours } from '@theme';
-import { vw } from '@utils';
 
 const Drawer = createDrawerNavigator<DrawerRoutes>();
 
 const DrawerNavigator = () => {
+  const categories = useSelector(categoriesSelector);
   return (
     <Drawer.Navigator
-      initialRouteName='Machines'
-      screenOptions={props => ({
-        drawerStyle: styles.drawerStyle,
-      })}
-    // drawerContent={props => <DrawerContent {...props} />}
+      initialRouteName='Dashboard'
     >
       <Drawer.Screen name="Dashboard" component={DashboardScreen} />
+      {
+        categories && categories.map((category) => {
+          return <Drawer.Screen
+            key={category.id}
+            name={category.title}
+            component={MachineScreen} initialParams={{
+              categoryId: category.id
+            }} />
+        })
+      }
       <Drawer.Screen name="Categories" component={CategoryScreen} />
-      <Drawer.Screen name="Machines" component={MachineScreen} />
+
     </Drawer.Navigator>
   );
 };
 
 export default DrawerNavigator;
-
-const styles = StyleSheet.create({
-  drawerStyle: {
-    // width: vw * 70,
-    // backgroundColor: colours.black,
-  },
-});

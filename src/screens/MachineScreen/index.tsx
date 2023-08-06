@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Alert, FlatList, View } from 'react-native';
-import { addNewField, addNewItem, categoriesSelector, changeCategoryTitle, changeFieldTitle, changeItemFieldValue, removeCategory, removeField, removeItem, selectTitleField } from '../../redux/slices/appSlice';
+import { addNewItem, categoriesSelector, changeCategoryTitle, changeItemFieldValue, removeItem, selectTitleField } from '../../redux/slices/appSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Text } from 'react-native-paper';
 import ItemCard from '../../components/ItemCard';
@@ -8,12 +8,14 @@ import { CategoryType } from '@types';
 import { generateUID } from '@utils';
 import styles from './styles';
 
-
-const MachineScreen: React.FC = () => {
+const MachineScreen: React.FC = (props) => {
     const dispatch = useDispatch();
     const categories = useSelector(categoriesSelector);
     const [selectedCategory, setSelectedCategory] = React.useState<CategoryType>(null);
     const machines = selectedCategory?.items || [];
+
+    console.log("props", props);
+
 
     useEffect(() => {
         if (categories.length > 0) {
@@ -21,9 +23,8 @@ const MachineScreen: React.FC = () => {
         }
     }, [categories]);
 
-
     const renderCategoryItem = ({ item }) => {
-        item.values = selectedCategory.fields?.map((field) => ({ key: field.key, title: field.title, value: item.values.find(value => value.key === field.key)?.value }));
+        item.values = selectedCategory.fields?.map((field) => ({ ...field, value: item.values.find(value => value.key === field.key)?.value }));
 
         return <ItemCard
             item={item}
@@ -78,13 +79,9 @@ const MachineScreen: React.FC = () => {
                 fieldKey: field_key,
                 value: value,
             };
-            console.log("payload", payload);
-
 
             await dispatch(changeItemFieldValue(payload))
         } catch (error) {
-            console.log(error);
-
             Alert.alert("Error", error?.message);
         }
     }
@@ -96,13 +93,8 @@ const MachineScreen: React.FC = () => {
                 value: value,
             };
 
-            console.log("payload", payload);
-
-
             await dispatch(changeCategoryTitle(payload))
         } catch (error) {
-            console.log(error);
-
             Alert.alert("Error", error?.message);
         }
     }
