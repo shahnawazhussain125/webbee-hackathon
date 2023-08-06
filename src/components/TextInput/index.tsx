@@ -7,7 +7,7 @@ const TextInput: React.FC<TextInputProps> = (props) => {
         <PaperTextInput
             {...props}
             mode="outlined"
-            style={[props?.style, styles.textInput]}
+            style={[styles.textInput, props?.style]}
         />
     )
 }

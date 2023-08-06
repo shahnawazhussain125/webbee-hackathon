@@ -3,24 +3,35 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
-        // width: 100,
+        margin: 10,
         borderRadius: 8,
-        margin: 10
     },
     contentContainer: {
 
     },
     titleText: {
-        fontSize: 16,
-        fontWeight: "bold"
+        fontSize: 18,
+        fontWeight: "bold",
+        marginVertical: 5,
+    },
+    categoryNameInput: {
+        width: 325,
     },
     rowContainer: {
-        width: 400,
         flexDirection: "row",
         alignItems: "center",
+        justifyContent: "space-between",
     },
     fieldTypeText: {
+        fontWeight: "500",
         color: colours.pink,
+        textTransform: "uppercase",
+    },
+    footerRowContainer: {
+        marginTop: 20,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
     }
 });
 

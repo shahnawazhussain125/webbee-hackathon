@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import { Card, Text, IconButton, Button } from 'react-native-paper';
+import { FieldType, CategoryType } from '@types'
 import DropdownButton from '../DropdownButton';
 import { TextInput } from '@components';
 import { colours } from '@theme';
@@ -14,37 +15,59 @@ const dropdownOptions = [
     { label: 'Date', value: 'date' },
 ];
 
+interface CategoryCardProps {
+    item: CategoryType;
+    addNewField: (category_id: string, field_type: string) => void;
+    removeField: (category_id: string, field_key: string) => void;
+    removeCategory: (category_id: string) => void;
+    onChangeFieldValue: (category_id: string, field_key: string, field_value: string) => void;
+    onChangeCategoryTitle: (category_id: string, value: string) => void;
+    onSelectTitleField: (category_id: string, field_key: string) => void;
+}
 
-const CategoryCard = ({ item, addNewField, removeField, removeCategory, onChangeFieldValue, onChangeCategoryTitle, onSelectTitleField }) => {
+
+const CategoryCard = ({ item, addNewField, removeField, removeCategory, onChangeFieldValue, onChangeCategoryTitle, onSelectTitleField }: CategoryCardProps) => {
     const windowWidth = useWindowDimensions().width;
     const cardWidth = windowWidth / 2 - 40;
 
-    const handleOnAddField = (field_type) => {
-        addNewField(item.id, field_type);
+    const titleFields = item.fields.map(field => ({ label: field.title, value: field.key }));
+    const textFieldLable = `Title Field: ${item.fields.find((field: FieldType) => field.key === item.item_title_key)?.title || "Unnamed Field"} `
+
+    const handleOnAddField = (field_type: string) => {
+        if (addNewField) {
+            addNewField(item.id, field_type);
+        }
     }
-    const handleOnRemoveField = (field_key) => {
-        removeField(item.id, field_key);
+
+    const handleOnRemoveField = (field_key: string) => {
+        if (removeField) {
+            removeField(item.id, field_key);
+        }
     }
 
     const handleOnRemoveCategory = () => {
-        removeCategory(item.id);
+        if (removeCategory) {
+            removeCategory(item.id);
+        }
     }
 
-    const handleOnChangeFieldValue = (field_key, field_value) => {
-        onChangeFieldValue(item.id, field_key, field_value);
+    const handleOnChangeFieldValue = (field_key: string, field_value: string) => {
+        if (onChangeFieldValue) {
+            onChangeFieldValue(item.id, field_key, field_value);
+        }
     }
 
-    const handleOnChangeCategoryTitle = (value) => {
-        onChangeCategoryTitle(item.id, value);
+    const handleOnChangeCategoryTitle = (value: string) => {
+        if (onChangeCategoryTitle) {
+            onChangeCategoryTitle(item.id, value);
+        }
     }
 
-    const handleOnSelectTitleField = (field_key) => {
-        onSelectTitleField(item.id, field_key)
+    const handleOnSelectTitleField = (field_key: string) => {
+        if (onSelectTitleField) {
+            onSelectTitleField(item.id, field_key)
+        }
     }
-
-    const titleFields = item.fields.map(field => ({ label: field.title, value: field.key }));
-
-    const textFieldLable = `Title Field: ${item.fields.find(field => field.key === item.item_title_key)?.title || "Unnamed Field"} `
 
     return (
         <Card style={[styles.container, { width: cardWidth }]}>
@@ -56,9 +79,10 @@ const CategoryCard = ({ item, addNewField, removeField, removeCategory, onChange
                     placeholder="Category Name"
                     value={item.title}
                     onChangeText={handleOnChangeCategoryTitle}
+                    style={[styles.categoryNameInput, { width: cardWidth - 50 }]}
                 />
                 {
-                    item.fields.map((field, index) => {
+                    item.fields.map((field: FieldType, index: number) => {
                         return (
                             <View style={styles.rowContainer} key={index}>
                                 <TextInput
@@ -66,25 +90,24 @@ const CategoryCard = ({ item, addNewField, removeField, removeCategory, onChange
                                     label="Field"
                                     placeholder={field.title}
                                     value={field.title}
+                                    style={[styles.categoryNameInput, { width: cardWidth - 175 }]}
                                     onChangeText={(text) => handleOnChangeFieldValue(field.key, text)}
                                 />
                                 <Text variant="bodyLarge" style={styles.fieldTypeText}>{field.type}</Text>
                                 <IconButton
-                                    icon="camera"
+                                    size={30}
+                                    icon="trash-can-outline"
                                     iconColor={colours.black}
-                                    size={20}
                                     onPress={() => handleOnRemoveField(field.key)}
                                 />
                             </View>
                         )
                     })
                 }
-
-                <DropdownButton title={textFieldLable} onSelectItem={handleOnSelectTitleField} dropdownOptions={titleFields} />
-
-                <View>
-                    <DropdownButton title="Title Field" onSelectItem={handleOnAddField} dropdownOptions={dropdownOptions} />
-                    <Button mode="outlined" onPress={handleOnRemoveCategory} >
+                <DropdownButton title={textFieldLable} onSelectItem={handleOnSelectTitleField} options={titleFields} />
+                <View style={styles.footerRowContainer}>
+                    <DropdownButton title="Add Field" onSelectItem={handleOnAddField} options={dropdownOptions} />
+                    <Button mode="contained" onPress={handleOnRemoveCategory} >
                         Remove
                     </Button>
                 </View>

@@ -8,12 +8,11 @@ import { CategoryType } from '@types';
 import { generateUID } from '@utils';
 import styles from './styles';
 
-const categories = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
 const CategoryScreen: React.FC = () => {
     const dispatch = useDispatch();
     const categories = useSelector(categoriesSelector);
-    const renderCategoryItem = ({ item }) => {
+
+    const renderCategoryItem = ({ item }: { item: CategoryType }) => {
         return <CategoryCard
             item={item}
             addNewField={handleOnNewField}
@@ -27,7 +26,7 @@ const CategoryScreen: React.FC = () => {
 
     const handleOnAddCategory = async () => {
         try {
-            const payload: CategoryType = {
+            const payload = {
                 id: generateUID(),
                 title: "New Catgory",
                 fields: [{
@@ -38,16 +37,13 @@ const CategoryScreen: React.FC = () => {
                 items: []
             };
 
-
             await dispatch(addCategory(payload))
-        } catch (error) {
-            console.log(error);
-
+        } catch (error: any) {
             Alert.alert("Error", error?.message);
         }
     }
 
-    const handleOnNewField = async (category_id, field_type) => {
+    const handleOnNewField = async (category_id: string, field_type: string): Promise<void> => {
         try {
             const payload = {
                 categoryId: category_id,
@@ -59,14 +55,12 @@ const CategoryScreen: React.FC = () => {
             };
 
             await dispatch(addNewField(payload))
-        } catch (error) {
-            console.log(error);
-
+        } catch (error: any) {
             Alert.alert("Error", error?.message);
         }
     }
 
-    const handleOnRemoveField = async (category_id, field_key) => {
+    const handleOnRemoveField = async (category_id: string, field_key: string): Promise<void> => {
         try {
             const payload = {
                 categoryId: category_id,
@@ -74,28 +68,24 @@ const CategoryScreen: React.FC = () => {
             };
 
             await dispatch(removeField(payload))
-        } catch (error) {
-            console.log(error);
-
+        } catch (error: any) {
             Alert.alert("Error", error?.message);
         }
     }
 
-    const handleOnRemoveCategory = async (category_id) => {
+    const handleOnRemoveCategory = async (category_id: string): Promise<void> => {
         try {
             const payload = {
                 categoryId: category_id,
             };
 
             await dispatch(removeCategory(payload))
-        } catch (error) {
-            console.log(error);
-
+        } catch (error: any) {
             Alert.alert("Error", error?.message);
         }
     }
 
-    const handleOnChangeFieldValue = async (category_id, field_key, value) => {
+    const handleOnChangeFieldValue = async (category_id: string, field_key: string, value: string): Promise<void> => {
         try {
             const payload = {
                 categoryId: category_id,
@@ -104,32 +94,24 @@ const CategoryScreen: React.FC = () => {
             };
 
             await dispatch(changeFieldTitle(payload))
-        } catch (error) {
-            console.log(error);
-
+        } catch (error: any) {
             Alert.alert("Error", error?.message);
         }
     }
 
-    const handleOnChangeCategoryTitle = async (category_id, value) => {
+    const handleOnChangeCategoryTitle = async (category_id: string, value: string): Promise<void> => {
         try {
             const payload = {
                 categoryId: category_id,
                 value: value,
             };
-
-            console.log("payload", payload);
-
-
             await dispatch(changeCategoryTitle(payload))
-        } catch (error) {
-            console.log(error);
-
+        } catch (error: any) {
             Alert.alert("Error", error?.message);
         }
     }
 
-    const handleOnSelectTitleField = async (category_id, field_key) => {
+    const handleOnSelectTitleField = async (category_id: string, field_key: string) => {
         try {
             const payload = {
                 categoryId: category_id,
@@ -137,13 +119,10 @@ const CategoryScreen: React.FC = () => {
             };
 
             await dispatch(selectTitleField(payload))
-        } catch (error) {
-            console.log(error);
-
+        } catch (error: any) {
             Alert.alert("Error", error?.message);
         }
     }
-
 
     return (
         <View style={styles.container}>

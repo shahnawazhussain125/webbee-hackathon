@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     textInput: {
-        width: '60%',
+        width: 200,
         borderRadius: 8,
         margin: 10
     },
