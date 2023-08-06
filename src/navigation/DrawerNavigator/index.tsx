@@ -19,7 +19,7 @@ const DrawerNavigator: React.FC = () => {
       {categories && categories.map((category: CategoryType) => (
         <Drawer.Screen
           key={category.id}
-          name={category.id as keyof DrawerRoutes}
+          name={category.title as keyof DrawerRoutes}
           component={MachineScreen}
           initialParams={{
             categoryId: category.id

@@ -5,9 +5,8 @@ import { addCategory, addNewField, categoriesSelector, changeCategoryTitle, chan
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'react-native-paper';
 import { CategoryType } from '@types';
-import { v4 as uuidv4 } from 'uuid';
-import styles from './styles';
 import { generateUID } from '@utils';
+import styles from './styles';
 
 const categories = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
