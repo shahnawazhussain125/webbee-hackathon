@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
-        // width: 100,
         borderRadius: 8,
         margin: 10
     },
@@ -21,6 +20,9 @@ const styles = StyleSheet.create({
     },
     fieldTypeText: {
         color: colours.pink,
+    },
+    footerContainer: {
+        marginVertical: 5,
     }
 });
 

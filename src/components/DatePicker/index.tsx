@@ -3,7 +3,13 @@ import { TouchableOpacity, View } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import TextInput from "../TextInput";
 
-const DatePicker = ({ title, value, onChangeDate }) => {
+interface DatePickerProps {
+    title: string;
+    value: string;
+    onChangeDate: (date: string) => void;
+}
+
+const DatePicker = ({ title, value, onChangeDate }: DatePickerProps) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
     const showDatePicker = () => {
@@ -20,7 +26,7 @@ const DatePicker = ({ title, value, onChangeDate }) => {
     };
 
     return (
-        <View>
+        <View >
             <TouchableOpacity onPress={showDatePicker}>
                 <TextInput
                     mode="outlined"

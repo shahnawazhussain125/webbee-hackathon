@@ -3,6 +3,7 @@ const lightBlue = '#3482ce';
 const green = '#00b925';
 const pink = '#5F04EC';
 const white = '#ffffff';
+const gray = '#f0f0f0';
 
 export const colours = {
   lightBlue,
@@ -10,4 +11,5 @@ export const colours = {
   pink,
   black,
   white,
+  gray,
 };

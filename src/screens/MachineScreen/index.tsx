@@ -1,32 +1,41 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Alert, FlatList, View } from 'react-native';
 import { addNewItem, categoriesSelector, changeCategoryTitle, changeItemFieldValue, removeItem, selectTitleField } from '../../redux/slices/appSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { RouteProp, useFocusEffect } from '@react-navigation/native';
+import { CategoryType, ItemType, ItemValueType } from '@types';
+import { useAppDispatch, useAppSelector } from '@hooks';
 import { Button, Text } from 'react-native-paper';
 import ItemCard from '../../components/ItemCard';
-import { CategoryType } from '@types';
 import { generateUID } from '@utils';
 import styles from './styles';
 
-const MachineScreen: React.FC = ({ route }) => {
-    const { categoryId } = route.params;
-    const dispatch = useDispatch();
-    const categories = useSelector(categoriesSelector);
-    const [selectedCategory, setSelectedCategory] = React.useState<CategoryType>(null);
+type MachineScreenProps = {
+    route: RouteProp<{ params: { categoryId: string } }, 'params'>;
+};
+
+const MachineScreen = (props: MachineScreenProps) => {
+    const { categoryId } = props.route.params;
+    const dispatch = useAppDispatch();
+    const categories = useAppSelector(categoriesSelector);
+    const [selectedCategory, setSelectedCategory] = React.useState<CategoryType | null>(null);
     const machines = selectedCategory?.items || [];
 
-    useEffect(() => {
-        if (categories.length > 0) {
-            const _selectedCategory = categories.find(category => category.id === categoryId);
-            setSelectedCategory(_selectedCategory);
-        }
-    }, [categories, categoryId]);
+    useFocusEffect(
+        React.useCallback(() => {
+            if (categories.length > 0) {
+                const _selectedCategory = categories.find((category: CategoryType) => category.id === categoryId);
+                setSelectedCategory(_selectedCategory);
+            }
+        }, [categories, categoryId])
+    );
 
-    const renderCategoryItem = ({ item }) => {
-        item.values = selectedCategory.fields?.map((field) => ({ ...field, value: item.values.find(value => value.key === field.key)?.value }));
+    const renderCategoryItem = ({ item }: ItemType) => {
+        if (!selectedCategory) return null;
+        item.values = selectedCategory.fields?.map((field) => ({ ...field, value: item.values.find((value: ItemValueType) => value.key === field.key)?.value }));
 
         return <ItemCard
             item={item}
+            title_key={selectedCategory.item_title_key}
             onRemoveItem={handleOnRemoveItem}
             onChangeFieldValue={handleOnChangeFieldValue}
             onChangeCategoryTitle={handleOnChangeCategoryTitle}
@@ -34,8 +43,9 @@ const MachineScreen: React.FC = ({ route }) => {
         />;
     }
 
-    const handleOnAddItem = async () => {
+    const handleOnAddItem = async (): Promise<void> => {
         try {
+            if (!selectedCategory) return;
             const payload = {
                 categoryId: selectedCategory.id,
                 item: {
@@ -44,34 +54,31 @@ const MachineScreen: React.FC = ({ route }) => {
                 }
             };
 
-            console.log("payload", payload);
-
-
             await dispatch(addNewItem(payload))
-        } catch (error) {
-            console.log(error);
-
+        } catch (error: any) {
             Alert.alert("Error", error?.message);
         }
     }
 
-    const handleOnRemoveItem = async (item_id) => {
+    const handleOnRemoveItem = async (item_id: string): Promise<void> => {
         try {
+            if (!selectedCategory) return;
+
             const payload = {
                 categoryId: selectedCategory.id,
                 itemId: item_id,
             };
 
             await dispatch(removeItem(payload))
-        } catch (error) {
-            console.log(error);
-
+        } catch (error: any) {
             Alert.alert("Error", error?.message);
         }
     }
 
-    const handleOnChangeFieldValue = async (item_id, field_key, value) => {
+    const handleOnChangeFieldValue = async (item_id: string, field_key: string, value: string): Promise<void> => {
         try {
+            if (!selectedCategory) return;
+
             const payload = {
                 categoryId: selectedCategory.id,
                 itemId: item_id,
@@ -80,12 +87,12 @@ const MachineScreen: React.FC = ({ route }) => {
             };
 
             await dispatch(changeItemFieldValue(payload))
-        } catch (error) {
+        } catch (error: any) {
             Alert.alert("Error", error?.message);
         }
     }
 
-    const handleOnChangeCategoryTitle = async (category_id, value) => {
+    const handleOnChangeCategoryTitle = async (category_id: string, value: string): Promise<void> => {
         try {
             const payload = {
                 categoryId: category_id,
@@ -93,12 +100,12 @@ const MachineScreen: React.FC = ({ route }) => {
             };
 
             await dispatch(changeCategoryTitle(payload))
-        } catch (error) {
+        } catch (error: any) {
             Alert.alert("Error", error?.message);
         }
     }
 
-    const handleOnSelectTitleField = async (category_id, field_key) => {
+    const handleOnSelectTitleField = async (category_id: string, field_key: string) => {
         try {
             const payload = {
                 categoryId: category_id,
@@ -106,18 +113,14 @@ const MachineScreen: React.FC = ({ route }) => {
             };
 
             await dispatch(selectTitleField(payload))
-        } catch (error) {
-            console.log(error);
-
+        } catch (error: any) {
             Alert.alert("Error", error?.message);
         }
     }
 
-    console.log("machines", machines);
-
     return (
         <View style={styles.container}>
-            <View style={{ height: 100 }}>
+            <View style={styles.headerContainer}>
                 <Text style={styles.titleText}>Machines</Text>
                 <Button mode="contained" onPress={handleOnAddItem}>
                     Add New Item
@@ -127,9 +130,8 @@ const MachineScreen: React.FC = ({ route }) => {
                 data={machines}
                 numColumns={2}
                 renderItem={renderCategoryItem}
-                contentContainerStyle={{ alignItems: "center" }}
+                contentContainerStyle={{ paddingHorizontal: 15, }}
             />
-
         </View>
     )
 }

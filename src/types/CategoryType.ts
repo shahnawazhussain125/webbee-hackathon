@@ -6,7 +6,7 @@ export interface FieldType {
 
 export interface ItemValueType {
   key: string;
-  value: string;
+  value: string | boolean | number;
 }
 
 export interface ItemType {

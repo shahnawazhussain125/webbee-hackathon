@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {CategoryType} from '@types';
 import {produce} from 'immer';
+import {RootState} from '../store';
 
 interface AppState {
   categories: CategoryType[];
@@ -10,7 +11,7 @@ const initialState: AppState = {
   categories: [],
 };
 
-export const appSlice = createSlice({
+export const itemSlice = createSlice({
   name: 'machine',
   initialState: initialState,
   reducers: {
@@ -98,33 +99,11 @@ export const appSlice = createSlice({
       console.log('valueIndex', valueIndex);
       console.log('itemIndex', itemIndex);
       console.log('categoryIndex', categoryIndex);
-
-      // if (valueIndex === -1) {
-      //   state.categories[categoryIndex].items[itemIndex].values.push({
-      //     key: fieldKey,
-      //     value: value,
-      //   });
-      //   return;
-      // }
-
-      // state.categories[categoryIndex].items[itemIndex].values[
-      //   valueIndex
-      // ].value = value;
     },
   },
 });
 
-export const categoriesSelector = state => state.appReducer.categories;
-export const {
-  addCategory,
-  removeCategory,
-  changeCategoryTitle,
-  addNewField,
-  removeField,
-  changeFieldTitle,
-  selectTitleField,
-  ///
-  addNewItem,
-  removeItem,
-} = appSlice.actions;
-export default appSlice.reducer;
+export const categoriesSelector = (state: RootState) =>
+  state.appReducer.categories;
+export const {selectTitleField, addNewItem, removeItem} = itemSlice.actions;
+export default itemSlice.reducer;

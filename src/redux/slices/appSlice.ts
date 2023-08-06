@@ -1,6 +1,7 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 import {CategoryType} from '@types';
 import {produce} from 'immer';
+import {RootState} from '../store';
 
 interface AppState {
   categories: CategoryType[];
@@ -114,7 +115,8 @@ export const appSlice = createSlice({
   },
 });
 
-export const categoriesSelector = state => state.appReducer.categories;
+export const categoriesSelector = (state: RootState) =>
+  state.appReducer.categories;
 export const {
   addCategory,
   removeCategory,

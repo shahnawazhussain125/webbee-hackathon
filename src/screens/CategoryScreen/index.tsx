@@ -2,15 +2,15 @@ import React from 'react';
 import { Alert, FlatList, View } from 'react-native';
 import CategoryCard from "../../components/CategoryCard"
 import { addCategory, addNewField, categoriesSelector, changeCategoryTitle, changeFieldTitle, removeCategory, removeField, selectTitleField } from '../../redux/slices/appSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@hooks';
 import { Button } from 'react-native-paper';
 import { CategoryType } from '@types';
 import { generateUID } from '@utils';
 import styles from './styles';
 
 const CategoryScreen: React.FC = () => {
-    const dispatch = useDispatch();
-    const categories = useSelector(categoriesSelector);
+    const dispatch = useAppDispatch();
+    const categories = useAppSelector(categoriesSelector);
 
     const renderCategoryItem = ({ item }: { item: CategoryType }) => {
         return <CategoryCard
@@ -130,9 +130,9 @@ const CategoryScreen: React.FC = () => {
                 data={categories}
                 numColumns={2}
                 renderItem={renderCategoryItem}
-                contentContainerStyle={{ alignItems: "center" }}
+                contentContainerStyle={styles.contentContainer}
             />
-            <View style={{ height: 100, paddingHorizontal: 20, justifyContent: "center" }}>
+            <View style={styles.footerContainer}>
                 <Button mode="contained" onPress={handleOnAddCategory}>
                     Add Category
                 </Button>

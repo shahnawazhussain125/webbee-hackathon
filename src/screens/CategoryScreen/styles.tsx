@@ -4,13 +4,18 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        alignItems: "center",
         backgroundColor: colours.white,
     },
     contentContainer: {
-        // flex: 1,
         width: "100%",
         flexWrap: 'wrap',
-        backgroundColor: "red",
+        marginVertical: 20,
+    },
+    footerContainer: {
+        height: 100,
+        paddingHorizontal: 20,
+        justifyContent: "center"
     }
 });
 
