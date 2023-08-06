@@ -4,30 +4,29 @@ import { categoriesSelector } from '../../redux/slices/appSlice';
 import DashboardScreen from '../../screens/DashboardScreen';
 import CategoryScreen from '../../screens/CategoryScreen';
 import MachineScreen from '../../screens/MachineScreen';
-import { useSelector } from 'react-redux';
-import { DrawerRoutes } from '@types';
+import { CategoryType, DrawerRoutes } from '@types';
+import { useAppSelector } from '@hooks';
 
 const Drawer = createDrawerNavigator<DrawerRoutes>();
 
-const DrawerNavigator = () => {
-  const categories = useSelector(categoriesSelector);
+const DrawerNavigator: React.FC = () => {
+  const categories = useAppSelector(categoriesSelector);
   return (
     <Drawer.Navigator
       initialRouteName='Dashboard'
     >
       <Drawer.Screen name="Dashboard" component={DashboardScreen} />
-      {
-        categories && categories.map((category) => {
-          return <Drawer.Screen
-            key={category.id}
-            name={category.title}
-            component={MachineScreen} initialParams={{
-              categoryId: category.id
-            }} />
-        })
-      }
+      {categories && categories.map((category: CategoryType) => (
+        <Drawer.Screen
+          key={category.id}
+          name={category.id as keyof DrawerRoutes}
+          component={MachineScreen}
+          initialParams={{
+            categoryId: category.id
+          }}
+        />
+      ))}
       <Drawer.Screen name="Categories" component={CategoryScreen} />
-
     </Drawer.Navigator>
   );
 };

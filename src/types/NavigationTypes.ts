@@ -22,5 +22,5 @@ export type MainRoutes = {
 export type DrawerRoutes = {
   Dashboard: undefined;
   Categories: undefined;
-  Machines: undefined;
+  Machines: {categoryId: string};
 };

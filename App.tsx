@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StatusBar, View, StyleSheet } from 'react-native';
 import Navigations from './src/navigation';
 

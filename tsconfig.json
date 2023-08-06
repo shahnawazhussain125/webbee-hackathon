@@ -29,7 +29,8 @@
       "@utils": ["./src/utils"],
       "@constants": ["./src/constants"],
       "@theme": ["./src/theme"],
-      "@types": ["./src/types"]
+      "@types": ["./src/types"],
+      "@hooks": ["./src/hooks"]
     },
     "allowJs": true,
     "jsx": "react-native",
