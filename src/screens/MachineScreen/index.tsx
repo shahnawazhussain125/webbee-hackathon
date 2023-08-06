@@ -8,20 +8,19 @@ import { CategoryType } from '@types';
 import { generateUID } from '@utils';
 import styles from './styles';
 
-const MachineScreen: React.FC = (props) => {
+const MachineScreen: React.FC = ({ route }) => {
+    const { categoryId } = route.params;
     const dispatch = useDispatch();
     const categories = useSelector(categoriesSelector);
     const [selectedCategory, setSelectedCategory] = React.useState<CategoryType>(null);
     const machines = selectedCategory?.items || [];
 
-    console.log("props", props);
-
-
     useEffect(() => {
         if (categories.length > 0) {
-            setSelectedCategory(categories[0]);
+            const _selectedCategory = categories.find(category => category.id === categoryId);
+            setSelectedCategory(_selectedCategory);
         }
-    }, [categories]);
+    }, [categories, categoryId]);
 
     const renderCategoryItem = ({ item }) => {
         item.values = selectedCategory.fields?.map((field) => ({ ...field, value: item.values.find(value => value.key === field.key)?.value }));
