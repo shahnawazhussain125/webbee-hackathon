@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert, FlatList, View } from 'react-native';
 import CategoryCard from "../../components/CategoryCard"
-import { addCategory, addNewField, categoriesSelector, changeCategoryTitle, changeFieldTitle, removeCategory, removeField, selectTitleField } from '../../redux/slices/appSlice';
+import { addCategory, addNewField, categoriesSelector, changeCategoryTitle, changeFieldTitle, removeCategory, removeField, selectTitleField } from '../../redux/slices/categorySlice';
 import { useAppDispatch, useAppSelector } from '@hooks';
 import { Button } from 'react-native-paper';
 import { CategoryType } from '@types';
@@ -29,12 +29,12 @@ const CategoryScreen: React.FC = () => {
             const payload = {
                 id: generateUID(),
                 title: "New Catgory",
+                item_title_key: null,
                 fields: [{
                     title: "Field",
                     type: "text",
                     key: generateUID(),
                 }],
-                items: []
             };
 
             await dispatch(addCategory(payload))

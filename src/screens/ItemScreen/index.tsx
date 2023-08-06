@@ -1,6 +1,7 @@
 import React from 'react';
 import { Alert, FlatList, View } from 'react-native';
-import { addNewItem, categoriesSelector, changeCategoryTitle, changeItemFieldValue, removeItem, selectTitleField } from '../../redux/slices/appSlice';
+import { categoriesSelector } from '../../redux/slices/categorySlice';
+import { addNewItem, changeItemFieldValue, itemsSelector, removeItem } from '../../redux/slices/itemSlice';
 import { RouteProp, useFocusEffect } from '@react-navigation/native';
 import { CategoryType, ItemType, ItemValueType } from '@types';
 import { useAppDispatch, useAppSelector } from '@hooks';
@@ -9,37 +10,36 @@ import ItemCard from '../../components/ItemCard';
 import { generateUID } from '@utils';
 import styles from './styles';
 
-type MachineScreenProps = {
+type ItemScreenProps = {
     route: RouteProp<{ params: { categoryId: string } }, 'params'>;
 };
 
-const MachineScreen = (props: MachineScreenProps) => {
+const ItemScreen = (props: ItemScreenProps) => {
     const { categoryId } = props.route.params;
     const dispatch = useAppDispatch();
     const categories = useAppSelector(categoriesSelector);
+    const allItems = useAppSelector(itemsSelector);
+    const [selectedCategoryItems, setSelectedCategoryItems] = React.useState<ItemType[]>([]);
     const [selectedCategory, setSelectedCategory] = React.useState<CategoryType | null>(null);
-    const machines = selectedCategory?.items || [];
+
 
     useFocusEffect(
         React.useCallback(() => {
             if (categories.length > 0) {
-                const _selectedCategory = categories.find((category: CategoryType) => category.id === categoryId);
-                setSelectedCategory(_selectedCategory);
+                setSelectedCategory(categories.find((category: CategoryType) => category.id === categoryId));
+                setSelectedCategoryItems(allItems.filter((item: ItemType) => item.category_id === categoryId));
             }
         }, [categories, categoryId])
     );
 
     const renderCategoryItem = ({ item }: ItemType) => {
         if (!selectedCategory) return null;
-        item.values = selectedCategory.fields?.map((field) => ({ ...field, value: item.values.find((value: ItemValueType) => value.key === field.key)?.value }));
-
         return <ItemCard
             item={item}
+            fields={selectedCategory.fields}
             title_key={selectedCategory.item_title_key}
             onRemoveItem={handleOnRemoveItem}
             onChangeFieldValue={handleOnChangeFieldValue}
-            onChangeCategoryTitle={handleOnChangeCategoryTitle}
-            onSelectTitleField={handleOnSelectTitleField}
         />;
     }
 
@@ -47,11 +47,9 @@ const MachineScreen = (props: MachineScreenProps) => {
         try {
             if (!selectedCategory) return;
             const payload = {
-                categoryId: selectedCategory.id,
-                item: {
-                    id: generateUID(),
-                    values: selectedCategory.fields.map(field => ({ key: field.key, value: "" }))
-                }
+                id: generateUID(),
+                category_id: selectedCategory.id,
+                values: selectedCategory.fields.map(field => ({ key: field.key, value: "" }))
             };
 
             await dispatch(addNewItem(payload))
@@ -65,7 +63,6 @@ const MachineScreen = (props: MachineScreenProps) => {
             if (!selectedCategory) return;
 
             const payload = {
-                categoryId: selectedCategory.id,
                 itemId: item_id,
             };
 
@@ -80,7 +77,6 @@ const MachineScreen = (props: MachineScreenProps) => {
             if (!selectedCategory) return;
 
             const payload = {
-                categoryId: selectedCategory.id,
                 itemId: item_id,
                 fieldKey: field_key,
                 value: value,
@@ -92,42 +88,16 @@ const MachineScreen = (props: MachineScreenProps) => {
         }
     }
 
-    const handleOnChangeCategoryTitle = async (category_id: string, value: string): Promise<void> => {
-        try {
-            const payload = {
-                categoryId: category_id,
-                value: value,
-            };
-
-            await dispatch(changeCategoryTitle(payload))
-        } catch (error: any) {
-            Alert.alert("Error", error?.message);
-        }
-    }
-
-    const handleOnSelectTitleField = async (category_id: string, field_key: string) => {
-        try {
-            const payload = {
-                categoryId: category_id,
-                fieldKey: field_key,
-            };
-
-            await dispatch(selectTitleField(payload))
-        } catch (error: any) {
-            Alert.alert("Error", error?.message);
-        }
-    }
-
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
-                <Text style={styles.titleText}>Machines</Text>
+                <Text style={styles.titleText}>{selectedCategory?.title}</Text>
                 <Button mode="contained" onPress={handleOnAddItem}>
                     Add New Item
                 </Button>
             </View>
             <FlatList
-                data={machines}
+                data={selectedCategoryItems}
                 numColumns={2}
                 renderItem={renderCategoryItem}
                 contentContainerStyle={{ paddingHorizontal: 15, }}
@@ -136,4 +106,4 @@ const MachineScreen = (props: MachineScreenProps) => {
     )
 }
 
-export default MachineScreen;
+export default ItemScreen;

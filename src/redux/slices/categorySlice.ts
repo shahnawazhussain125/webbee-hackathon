@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {CategoryType} from '@types';
-import {produce} from 'immer';
 import {RootState} from '../store';
+import {produce} from 'immer';
 
 interface AppState {
   categories: CategoryType[];
@@ -11,7 +11,7 @@ const initialState: AppState = {
   categories: [],
 };
 
-export const appSlice = createSlice({
+export const categorySlice = createSlice({
   name: 'machine',
   initialState: initialState,
   reducers: {
@@ -63,60 +63,11 @@ export const appSlice = createSlice({
         categoryIndex
       ].fields.filter(field => field.key !== action.payload.fieldKey);
     },
-
-    addNewItem: (state, action) => {
-      const categoryIndex = state.categories.findIndex(
-        category => category.id === action.payload.categoryId,
-      );
-
-      state.categories[categoryIndex].items.push(action.payload.item);
-    },
-    removeItem: (state, action) => {
-      const {categoryId, itemId} = action.payload;
-      const categoryIndex = state.categories.findIndex(
-        category => category.id === categoryId,
-      );
-
-      state.categories[categoryIndex].items = state.categories[
-        categoryIndex
-      ].items.filter(item => item.id !== itemId);
-    },
-    changeItemFieldValue: (state, action) => {
-      const {categoryId, itemId, fieldKey, value} = action.payload;
-
-      const categoryIndex = state.categories.findIndex(
-        category => category.id === categoryId,
-      );
-
-      const itemIndex = state.categories[categoryIndex].items.findIndex(
-        item => item.id === itemId,
-      );
-
-      const valueIndex = state.categories[categoryIndex].items[
-        itemIndex
-      ].values.findIndex(value => value.key === fieldKey);
-
-      console.log('valueIndex', valueIndex);
-      console.log('itemIndex', itemIndex);
-      console.log('categoryIndex', categoryIndex);
-
-      if (valueIndex === -1) {
-        state.categories[categoryIndex].items[itemIndex].values.push({
-          key: fieldKey,
-          value: value,
-        });
-        return;
-      }
-
-      state.categories[categoryIndex].items[itemIndex].values[
-        valueIndex
-      ].value = value;
-    },
   },
 });
 
 export const categoriesSelector = (state: RootState) =>
-  state.appReducer.categories;
+  state.categoryReducer.categories;
 export const {
   addCategory,
   removeCategory,
@@ -125,9 +76,5 @@ export const {
   removeField,
   changeFieldTitle,
   selectTitleField,
-  ///
-  addNewItem,
-  removeItem,
-  changeItemFieldValue,
-} = appSlice.actions;
-export default appSlice.reducer;
+} = categorySlice.actions;
+export default categorySlice.reducer;

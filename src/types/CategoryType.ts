@@ -6,11 +6,12 @@ export interface FieldType {
 
 export interface ItemValueType {
   key: string;
-  value: string | boolean | number;
+  value: string | number | boolean;
 }
 
 export interface ItemType {
   id: string;
+  category_id: string;
   values: ItemValueType[];
 }
 
@@ -19,5 +20,4 @@ export interface CategoryType {
   title: string;
   item_title_key: string;
   fields: FieldType[];
-  items: ItemType[];
 }

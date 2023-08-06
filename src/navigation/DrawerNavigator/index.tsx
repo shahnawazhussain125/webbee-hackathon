@@ -1,9 +1,9 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { categoriesSelector } from '../../redux/slices/appSlice';
+import { categoriesSelector } from '../../redux/slices/categorySlice';
 import DashboardScreen from '../../screens/DashboardScreen';
 import CategoryScreen from '../../screens/CategoryScreen';
-import MachineScreen from '../../screens/MachineScreen';
+import ItemScreen from '../../screens/ItemScreen';
 import { CategoryType, DrawerRoutes } from '@types';
 import { useAppSelector } from '@hooks';
 
@@ -20,7 +20,7 @@ const DrawerNavigator: React.FC = () => {
         <Drawer.Screen
           key={category.id}
           name={category.id as keyof DrawerRoutes}
-          component={MachineScreen}
+          component={ItemScreen}
           initialParams={{
             categoryId: category.id,
           }}

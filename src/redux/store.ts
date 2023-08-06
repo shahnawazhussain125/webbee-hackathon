@@ -1,13 +1,15 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import {persistReducer, persistStore} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import appSlice from './slices/appSlice';
+import categorySlice from './slices/categorySlice';
 import {REDUX_STORAGE_KEY} from '@constants';
+import itemSlice from './slices/itemSlice';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 
 const rootReducer = combineReducers({
-  appReducer: appSlice,
+  categoryReducer: categorySlice,
+  itemReducer: itemSlice,
 });
 
 const middleware =

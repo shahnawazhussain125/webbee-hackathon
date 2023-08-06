@@ -1,3 +1,3 @@
 export * from './CategoryScreen';
 export * from './DashboardScreen';
-export * from './MachineScreen';
+export * from './ItemScreen';
